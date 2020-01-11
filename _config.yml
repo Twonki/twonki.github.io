@@ -1,7 +1,7 @@
-# Site configuration
-baseurl: "/" # the subpath of your site, e.g. /blog
+
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://twonki.github.io/" # the base hostname & protocol for your site
-permalink: /:title/
+permalink: :title/
 avatar: /assets/avatar.png
 favicon: /assets/favicon.ico
 basecss: 
