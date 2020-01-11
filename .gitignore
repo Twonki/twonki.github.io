@@ -1,3 +1,7 @@
+
+.jekyll-cache
+_site
+
 *.gem
 *.rbc
 /.config

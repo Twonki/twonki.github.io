@@ -1,25 +1,19 @@
 # Site configuration
-domain: "http://songroger.win"
-baseurl: "/murmur" # the subpath of your site, e.g. /blog
-url: "http://songroger.github.io/" # the base hostname & protocol for your site
+baseurl: "/" # the subpath of your site, e.g. /blog
+url: "http://twonki.github.io/" # the base hostname & protocol for your site
 permalink: /:title/
-avatar: /murmur/assets/avatar.jpg
-about: /murmur/assets/about.jpg
-favicon: /murmur/assets/favicon.ico
+avatar: /assets/avatar.png
+favicon: /assets/favicon.ico
 basecss: 
 # Theme specific configuration
-title: songroger
+title: Coprocessor
 description: >
-  Hi there, My name is Luozhan.Song, usually I use "songroger" as my ID everywhere.
-  I was born and raised in Hunan China. 
-  I'm really fond of beautiful design, drawing etc.
-
+  My name is Leonhard, I am a german lunatic forced to work with computers due to my physical inability to craft anything.
+  I like Testing, Teamplay, Haskell and you.  
+  
 # Contact and social media links
-twitter_username: songrogero
-github_username: songroger
-facebook_username: song.roger.1
-instagram_username: songroger198
-linkedin_username: songroger
+twitter_username: lapplislazuli
+github_username: twonki
 
 exclude: ['node_modules', 'gulpfile.js', 'package.json']
 
