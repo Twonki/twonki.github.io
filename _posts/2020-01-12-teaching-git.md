@@ -74,7 +74,7 @@ More complex ideas like rebasing and cherry picking can easily be shown with a g
 One analogy I often use is that making a commit is like *saving* in a video game.
 And that it makes sense to safe before you choose a class or spell to potentially checkout another one later.
 
-This is especially popular with trainees, older colleagues (except for older *gamers*) find this not a helpful comparison.
+This is especially popular with trainees, older colleagues (except for older *gamers*) didn't think this is a helpful comparison.
 
 <br>
 In general I will stick to this idea, but I also think it's lacking a little bit.
@@ -219,9 +219,9 @@ Sadly - some platforms (such as Azure) do not support GPG-signing. Hopefully thi
 Setting up both keys usually needs to be done only once (per machine) and fits well in the "git onboarding"-process.
 
 <br>
-**.gitignore** is your friend. In general I recommend [gitignore.io](www.gitignore.io) and manually write it somewhere on the cheat-sheet. 
+**.gitignore** is your friend. In general I recommend [gitignore.io](http://gitignore.io) and manually write it somewhere on the cheat-sheet.
 
-Never give a git-tutorial without mentioning gitignores! 
+Never give a git-tutorial without mentioning gitignores!
 
 ### Conclusion
 
