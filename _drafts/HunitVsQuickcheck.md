@@ -1,29 +1,27 @@
 ---
 layout: post
 title:  "HUnit vs. QuickCheck"
+date:   2020-01-30
 author: Leonhard Applis
 description: A thought on unit-testing and property-based-testing
 categories: [Testing, Haskell]
 ---
 
 I love testing. I really do.
-Especially on the unit- and integration-level.
-
 Seeing tests go green fills my heart with joy, and thinking up tests feels for me like a kid who build a lego-castle and now plays with figures in it.
-
-When I started my journey of Haskell, *Real World Haskell* introduced me to QuickCheck, which is a framework for property-based testing.
+<br>
+When I started my journey of Haskell, [*Real World Haskell*](http://book.realworldhaskell.org/) introduced me to QuickCheck, which is a framework for property-based testing.
 
 Instead of a normal test-setup and your common *arrange-act-assert* pattern you follow f.e. in Java,
 you describe a property which should hold true for the unit to test,
 and in addition an *arbitrary*-instance of your test-object, that is a way to generate a random test-object.
 QuickCheck will run over all your properties, insert random generated test-objects, and if the property holds for a hundred random samples the test passes.
-
+<br>
 I was stunned. The examples given from QuickCheck and *Real World Haskell* are very verbose and precise, while also incredibly powerful.
 In addition, randomized testing is known to reach better coverage, as sooner or later every unit-test one can manually write will be in the random samples.
 So my path was set: QuickCheck is the better tool, the mightier approach and from now on it is only QuickCheck.
-
+<br>
 It was a brave new world, and I set out to fail.
-
 Don't get me wrong - I still like QuickCheck.
 
 However its just a tool and I want to present some cases I came across where I'd choose the tool and where I'd avoid it.
@@ -34,20 +32,21 @@ they are maybe problems everyone can encounter in a similar way.
 ## QuickChecks' Pitfall 1: Expressiveness
 
 I was writing a simple calculator, which parses a given formula from a string and calculates it if possible.
-It can do some unary and ternary operators, and variables.
-
+It can do some unary and binary operators, and variables.
+<br>
 Some of the most important use-cases included:
 
-- Checking that brackets are applied properly, so that (1+2)*3 = 9
-- Checking that brackets *stack* properly, so that ((1+2)*(1+2))+(2*2) = 13
-- Checking some error cases, such as *2*log* --> "missing argument for log"
+- Checking that brackets are applied properly, so that (1+2)$\cdot$3 = 9
+- Checking that brackets *stack* properly, so that ((1+2)$\cdot$(1+2))+(2$\cdot$2) = 13
+- Checking some error cases, such as 2$\cdot$log --> "missing argument for log"
 
 These are fairly easy to write as unit tests, and the unit-tests themselves are verbose.
 An error in one of the test-cases is easily visible and verifiable.
 
 It is possible to create arbitrary instances for these cases.
-Overall, a faulty log should always yield an error. That is a valid property, and one we are interested in.
-
+Overall, a faulty log should always yield an error.
+That is a valid property and one we are interested in.
+<br>
 How would this property look like?
 
 ```Haskell
@@ -107,17 +106,17 @@ Then I checked for all potential moves and the resulting boards,
 and looked whether the amount of potential moves was right and that some edge-cases are either true or false.
 
 This approach is easy but rather noisy. It has at least 5 lines of code for every test-case, which is quite a lot for Haskell.
-The tests are also not well understandable - as either a lot is happening in factory methods, or the test itself is very cluttered.
+The tests are also not well understandable, as either a lot is happening in factory methods, or the test itself is very cluttered.
 This made me intensively think about property-based testing and where to go with this.
 
 Defining the properties would be fairly easy again - properties such as `prop_canMoveOntoEnemyFigures` or `prop_pawnCanBeReplaced`.
-
+<br>
 But the true problem is the following:
 
 **Randomly generating valid Chess-Boards with certain attributes.**
 
 Where attributes can be for example that a pawn is about to reach the other side of the board or your king is in chess.
-
+<br>
 The only fairly easy way to generate those I can think of is to start from a normal board and take random moves until the conditions are met.
 However this assumes you are able to make valid moves and can verify that the conditions are met - which themselves need tests.
 
@@ -135,10 +134,10 @@ Especially the last one was scary to me - because in the unknown you want to hav
 
 One apprentice I supervised was very happy with puzzle-solving programming and any kind of complex task you can give him.
 
-It was true bliss to see him solve the first concept of composition and functors or his own linked list.
+It was true bliss to see him solve composition and functors or his own recursive datastructures.
 
 We covered the topic of tests and to prove him the value I provided him with a handful of properties for AVL-trees.
-The arbitrary instance was simply putting a random list of integers into the trees `fromList` (which was undefined yet).
+The arbitrary instance was simply putting a random list of integers into the trees `fromList` (which was undefined by that time).
 
 I remember how I struggled implementing AVL-trees and always missing out one requirement or the other.
 Back in my first year of university I would have never come up with the idea of writing a test-suite to speed up things.
@@ -146,22 +145,22 @@ Back in my first year of university I would have never come up with the idea of 
 The stable and rich test-suite enabled him to solve it in about two days.
 Not only he got it *working* - but he actually understood those trees.
 We lived happily ever after.
-
-This is a bonus-point for learning with test suites - but that's true for QuickCheck and HUnit alike.
-
+<br>
+This is a pro-point for learning with test suites - but that's true for QuickCheck and HUnit alike.
 The bonus of QuickCheck is the expressiveness in this case.
+
 As this time there was no issue with defining arbitrary, and the properties are basically given,
-providing him with this test-suite took less than 30 minutes.
+providing him with this test-suite took less than 30 minutes and the properties where simple and readable.
 Altering the test-suite from integers to strings or custom data-types would be no problem.
 
-QuickCheck has been simply the better tool for this job.
+QuickCheck is simply the better tool for this job.
 
 ## HUnits grace - regression instead of regrets
 
 We know this - we are up to 90% coverage - the sky is blue and the birds are singing along with you and your functions.
-Once you want to showcase your idea, all your effort, the very first person has one idea and exactly this idea breaks the code.
+Once you want to showcase your program, all your effort, the very first person has one idea and exactly this idea breaks the code.
 
-You crawl back to your GHC and lick your wounds. You just got a bug.
+You crawl back to your desk and lick your wounds. You just got a bug.
 
 If you are unlucky enough to have this at work, you now got a Jira-Ticket and have to do a proper regression test in addition to the fix.
 
@@ -170,19 +169,23 @@ It may take long to fix your code, and you may decide to redo parts and you have
 
 What are your options?
 You can try and express your bug as a property. This often will leave you in a situation like *Pitfall 1* - its hard to express misbehaving as a property.
-
-Ok, you pull it off:
+<br>
+Nevertheless you pull it off:
 Your write an arbitrary instance, you write the property, you fix the code.
 
-You are showing it to the person who found the bug. You know have to defend your fixes, your arbitrary instance and maybe your property.
+You are showing it to the person who found the bug.
+You know have to defend your fixes, your arbitrary instance and maybe your property.
 
 If you'd have just had a unit-test you can tell him "this is what we put in last time - it's working now". Fair and Square.
+<br>
+I'd always do regression tests and bug-tests with classic-unit-tests over properties.
+First of all because I can usually easily write them, so I don't postpone them,
+and second of all because they are more expressive towards someone who doesn't want to know about properties and arbitraries.
 
-I'd always do regression tests and bug-tests with classic-unit-tests. First of all because I can usually easily write them, so I don't postpone them, and second of all because they are more expressive towards someone who doesn't want to know about properties and arbitraries.
-
+<br>
 Maybe your bugs show a missing property you have not covered. good!
-Add the Regressiontest in HUnit and the property in QuickCheck.
-But keep your verbose Regressiontest in case someone wants to check on your code.
+Add the regression-test in HUnit and the property in QuickCheck.
+But keep your verbose regression-test in case someone wants to check on your code.
 Because *proofing* that your property eliminates the regression test might not be that easy as just keeping the duplicate.
 
 ## Conclusion
@@ -192,10 +195,26 @@ after these pitfalls I noticed that classic unit-tests still have their place in
 
 The breaking point of using QuickCheck is nearly always, whether you can easily define an arbitrary instance.
 And easy usually does not mean you alone - but also that it makes sense for others.
-
+<br>
 For my latest, little bigger project I therefore used a hybrid approach - the more atomic building bricks are tested with QuickCheck,
-while the complex and often user-facing functions are Unit-Tests.
+while the complex and often user-facing functions are classic Unit-Tests.
+However, I have to admit that one may see the user-facing functions of my library rather as integration-tests.
 
 This feels healthy, looks fine and takes the best approach of both worlds.
-The user-facing tests can be seen as documentation, while the internal parts are very safe.
+The user-facing tests can be seen as documentation, while the internal parts are very safe and sound.
 Regression-tests in HUnit where easy to write and are more verbose when describing errors and failures than making anti-properties.
+<br>
+<br>
+**Addendum**:
+
+Alexis Kings post [Parse,don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/) is a good read in general and talks about verification of input,
+and that your application should only try to parse, that is parsing into e.g. a syntax tree or data structure, with no chance to ever create an invalid structure.
+If there is no possible valid structure, the parsing should fail. Like in your compiler.
+
+This splits the program into the "safe" part, where everything is in proper types and verified, and the "unsafe" part where parsing happens.
+I think if you stick to this advice, you can also separate your tests accordingly:
+
+For everything parsed, you can easily use QuickCheck properties - so in my calculator I could easily make an arbitrary-instance for my finished SyntaxTree.
+This is the "safe" part.
+To test the parsing and "unsafe" part, I'd stick to HUnit.
+For regression and integration HUnit.
