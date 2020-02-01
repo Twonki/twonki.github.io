@@ -1,8 +1,8 @@
 {
-  "name": "songroger.win",
-  "version": "1.0.0",
+  "name": "coprocessor.com",
+  "version": "0.0.1",
   "description": "powered by jekyll",
-  "author": "songroger",
+  "author": "Leonhard Applis",
   "keywords": [
     "css",
     "gulp",
@@ -14,9 +14,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/songroger/songroger.github.io"
+    "url": "https://github.com/twonki/twonki.github.io"
   },
-  "homepage": "https://songroger.github.io",
+  "homepage": "https://twonki.github.io",
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "browser-sync": "2.12.12",

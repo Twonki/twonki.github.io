@@ -5,6 +5,7 @@ date:   2020-01-30
 author: Leonhard Applis
 description: A thought on unit-testing and property-based-testing
 categories: [Testing, Haskell]
+reading: 10
 ---
 
 I love testing. I really do.

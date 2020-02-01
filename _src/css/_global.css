@@ -76,25 +76,6 @@ body {
   font-size: 0.9rem;
   line-height: 1.6rem;
 
-
-/*  background-image: linear-gradient(rgba(50, 50, 50, .1) 1px, transparent 1px);
-  background-size: 100% 28px;*/
-
-
-}
-
-/*@media screen and (min-width: 700px) {
-  body {
-    background-size: 100% 32px;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  body {
-    background-size: 100% 36px;
-  }
-}*/
-
 img {
   display: block;
   max-width: 100%;

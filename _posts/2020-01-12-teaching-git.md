@@ -5,6 +5,7 @@ date:   2020-01-12
 author: Leonhard Applis
 categories: [Teaching, Tipps, Tutorial]
 description: A summary of my lessons learned from teaching Git 
+reading: 20
 ---
 
 Mostly by accident I have become the *GoTo*-person in my department when it comes to git.

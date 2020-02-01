@@ -64,6 +64,16 @@
   }
 }
 
+.article__addition{
+  display: block;
+  margin-top: 0;
+  font-size: .7501rem;
+  color: #999;
+  font-family: "Segoe UI",Optima,"Helvetica Neue",sans-serif;
+  text-transform: uppercase;
+
+}
+
 .article__excerpt {
             color: #999;
         }
@@ -155,7 +165,7 @@
 
 .article__date {
   display: block;
-  margin-bottom: .8rem;
+  margin-bottom: 0rem;
   font-size: .7501rem;
 }
 
