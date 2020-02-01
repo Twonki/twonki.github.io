@@ -75,12 +75,17 @@ body {
   font-family: Georgia,'Source Sans Pro', sans-serif;
   font-size: 0.9rem;
   line-height: 1.6rem;
-
+}
 img {
   display: block;
   max-width: 100%;
   height: auto;
   border: 0;
+}
+
+a {
+  color:#222;
+  text-decoration: none;
 }
 
 a:hover, a:visited, a:active {

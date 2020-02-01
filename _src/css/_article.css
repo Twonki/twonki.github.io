@@ -163,8 +163,13 @@
   }
 }
 
-.article__date {
+.article__time {
   display: block;
+  margin-bottom: 0rem;
+  font-size: .7501rem;
+}
+
+.article__info {
   margin-bottom: 0rem;
   font-size: .7501rem;
 }

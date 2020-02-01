@@ -4,9 +4,10 @@ layout: default
 
 <article class="article">
   <h2 class="article__title article__title--single">{{ page.title }}</h2>
-  <time class="article__date" datetime="{{ page.date | date: "%Y-%m-%d" }}">{% if page.author %}By {{ page.author}} on {% endif %}{{ page.date | date: "%b %d, %Y" }}</time>
+  <time class="article__info" datetime="{{ page.date | date: "%Y-%m-%d" }}">{% if page.author %}By {{ page.author}} on {% endif %}{{ page.date | date: "%b %d, %Y" }}</time>
+  <br>
   {% if page.categories and page.categories.size>0 %}
-    <time class="article__date">
+    <time class="article__info">
       Categories: {{page.categories | join: ", "}}
     </time>
     {% if page.reading == 0 or page.reading==False%}
@@ -15,8 +16,8 @@ layout: default
 
   {% endif %}
   {% if page.reading %}
-  <time class="article__date">
-    reading time: ~{{page.reading}} minutes
+  <time class="article__info">
+    <> reading time: ~{{page.reading}} minutes
   </time>
   <br>
 {% endif %}
