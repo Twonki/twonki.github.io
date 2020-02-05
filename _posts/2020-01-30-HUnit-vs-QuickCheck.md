@@ -18,7 +18,7 @@ When I started my journey of Haskell, [*Real World Haskell*](http://book.realwor
 Instead of a normal test-setup and your common *arrange-act-assert* pattern you follow for example with JUnit in Java,
 you describe a property which should hold true for the unit to test,
 and in addition an *arbitrary*-instance of your test-object, that means a way to generate a random test-object.
-QuickCheck will run over all your properties, insert random generated test-objects, and if the property holds for a hundred random samples the test passes.
+QuickCheck will run over all your properties, insert random generated test-objects and if the property holds for a hundred random samples the test passes.
 <br>
 <br>
 I was stunned.
@@ -35,14 +35,14 @@ It was a brave new world, and I set out to fail.
 Don't get me wrong - I still like QuickCheck.
 <br>
 <br>
-However its just a tool and I want to present some cases I came across where I'd choose the tool and where I'd avoid it.
-The following examples come fresh from my pet-projects, and while I'm for sure no grand-master and there are ways to do it better,
+However its just a tool and I want to present some cases I came across where I choose the tool and where I avoid it.
+The following examples come fresh from my pet-projects and while I'm for sure no grand-master and there are ways to do it better,
 they are maybe problems everyone can encounter in a similar way.
 
 ## QuickChecks' Pitfall 1: Expressiveness
 
 I was writing a simple calculator, which parses a given formula from a string and calculates it if possible.
-It can do some unary and binary operators, and variables.
+It can do some unary, binary operators and variables.
 <br>
 Some of the most important test-cases included:
 
@@ -50,7 +50,7 @@ Some of the most important test-cases included:
 - Checking that brackets *stack* properly, so that ((1+2)\*(1+2))+(2\*2) = 13
 - Checking some error cases, such as 2\*log --> "missing argument for log"
 
-These are fairly easy to write as unit tests, and the unit-tests themselves are verbose.
+These are fairly easy to write as unit tests which themselves are verbose.
 An error in one of the test-cases is easily visible and verifiable.
 
 It is possible to create arbitrary instances for these cases.
@@ -77,17 +77,17 @@ But it leaves one question: How would you make the random faulty-string?
 There are ways to do it, such as adding it to the end of a valid formula.
 This however expect you to be able to generate valid formulas.
 
-In general, I think there is not much grace in spending time to auto-generate failures, and there are infinite possibilities to do so.
+In general, I think there is not much grace in spending time to auto-generate failures and there are infinite possibilities to do so.
 <br><br>
 The real problem boils down to this:
 
-A test should test logic, and not introduce logic.
+A test should test logic and not introduce logic.
 
 While the property may be simple, the *arbitrary* instance is not - it is a potentially huge and debatable implementation.
 <br><br>
 Think about the bracket-example:
 
-Writing an arbitrary instance for this can be somewhat easy be done by defining the depth, an arbitrary instance for an un-bracketed formula and some randomness.
+Writing an arbitrary instance for this can be somewhat easy done by defining the depth, an arbitrary instance for an un-bracketed formula and some randomness.
 I think everyone will be able to do that.
 
 However, it's not
@@ -104,7 +104,7 @@ testParse_faultyLog_shouldResultInMissingArgumentMessage =
     in "missing argument for log" ~=? getLeft (parse formula)
 ```
 
-It's simple, readable, and gives you value.
+It's simple, readable and gives you value.
 
 It doesn't slow you down and you have no additional code to justify to anyone.
 
@@ -142,7 +142,7 @@ Where attributes can be for example that a pawn is about to reach the other side
 The only fairly easy way to generate those I can think of is to start from a normal board and take random moves until the conditions are met.
 However this assumes you are able to make valid moves and can verify that the conditions are met - which themselves need tests.
 
-I am sure there are very sophisticated approaches solving this, or simpler ones such reading them from a chess-database.
+I am sure there are very sophisticated approaches solving this or simpler ones such as reading them from a chess-database.
 <br><br>
 There are three problems remaining:
 
@@ -174,7 +174,7 @@ This is a pro-point for learning with test suites - but that's true for QuickChe
 
 The bonus of QuickCheck is the expressiveness in this case.
 
-As this time there was no issue with defining arbitrary, and the properties are basically given,
+As this time there was no issue with defining arbitrary and the properties are basically given,
 providing him with this test-suite took less than 30 minutes and the properties where simple and readable.
 Altering the test-suite from integers to strings or custom data-types would be no problem.
 <br><br>
@@ -189,8 +189,8 @@ You crawl back to your desk and lick your wounds. You just got a bug.
 <br><br>
 If you are unlucky enough to have this at work, you now got a Jira-Ticket and have to do a proper regression test in addition to the fix.
 
-With HUnit you can simply reproduce the input into your function, and compare the output.
-It may take long to fix your code, and you may decide to redo parts and you have to adjust verbose HUnit-tests.
+With HUnit you can simply reproduce the input into your function and compare the output.
+It may take long to fix your code, decide to redo parts and you have to adjust verbose HUnit-tests.
 
 What are your options?
 
@@ -253,7 +253,7 @@ and that your application should only try to parse, that is parsing into e.g. a 
 
 If there is no possible valid structure, the parsing should fail. Like in your compiler.
 <br><br>
-This splits the program into the "safe" part, where everything is in proper types and verified, and the "unsafe" part where parsing happens.
+This splits the program into the "safe" part, where everything is in proper types and verified and the "unsafe" part where parsing happens.
 I think if you stick to this advice, you can also separate your tests accordingly:
 
 For everything parsed, you can easily use QuickCheck properties - so in my calculator I could easily make an arbitrary-instance for my finished SyntaxTree.
