@@ -324,7 +324,101 @@ We fix this by passing the correct arguments into the docker image at runtime, w
 
 ### Add "Wait for it" and pass command args 
 
+So one way to pass the args is to set the entry point of docker when running. 
+But that's not the proper way to do it in my opinion. 
+A nicer way is to set environment variables in the dockerfile and invoke the command with the regarding parameters. 
+
+We do by adding the following to our Dockerfile: 
+
+```
+
+ENV MariaDB_Adress 127.0.0.1
+ENV MariaDB_Port 3306
+ENV MariaDB_DatabaseName microtope
+ENV MariaDB_User admin
+ENV MariaDB_PW admin
+
+ENTRYPOINT [Wesir -h ${MariaDB_Adress} -u ${MariaDB_User} --password ${MariaDB_PW} -p ${MariaDB_Port} -d ${MariaDB_DatabaseName}"]
+```
+
+This for example enables us to pass the password as a [docker-secret](https://docs.docker.com/engine/swarm/secrets/), which can be considered best practice. Same for Kubernetes.
+
+However if we start with a fresh instance of mariadb there is a little tweak: 
+Just writing "depends on" and declaring the mariadb will cause an issue. The reason is that the mariadb container says its ready the moment the mariadb engine is up. 
+That is not the point where the mariadb has initialised its databases and accepts requests. 
+So we need to wait for it. We can do so by adding sleep and retry commands to our images, but a good way to deal with the issue is ["wait for it"](https://github.com/vishnubob/wait-for-it).
+
+It makes a very basic (and usually invalid) ping-command on any host and port you want, and if it gets rejected it starts another specified shell command. 
+The repository is well documented, but we need only basic functionality. 
+
+To use it, we download the shell-file and add it to our resources. 
+Then we only have to adjust entrypoint: 
+
+```
+ ENTRYPOINT [ "/bin/bash", "-c","./Resources/wait-for-it.sh -t 0 -s --host=$MariaDB_Adress --port=$MariaDB_Port -- Wesir -h ${MariaDB_Adress} -u ${MariaDB_User} --password ${MariaDB_PW} -p ${MariaDB_Port} -d ${MariaDB_DatabaseName}"] 
+```
+
+The used flags are `-t 0` to "never stop trying" (quite motivating, otherwise it would end after trying for 100s) and `-s` to be silent. 
+To specify host and port we can re-use our environment variables. 
+
+Thats it! We can see it in full glory now. 
+
 ### Make a Minimal Docker-Compose
+
+With all the steps we needed up to this point, our compose is dead simple: 
+
+```
+version: '3.3'
+
+services:
+  db:
+    image: microtope/database
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      TZ: "Europe/Berlin"
+  wesir:
+    image: microtope/wesir
+    environment:
+      MariaDB_Adress: db
+      MariaDB_Port: 3306
+      MariaDB_User: admin
+      MariaDB_PW: admin
+    depends_on: 
+      - db
+```
+
+We run it with `docker-compose . up` and stop it properly with `docker-compose . down` (Don't forget to stop it). 
+
+to start it regularly we need to use docker-stack (the options for `deploy` are not available in compose). 
+
+To start it in a regular fashion, including restarting it, the ugly way is to add a cronjob to our image. 
+But we can use functions of docker-stack or maybe kubernetes. For docker, we add: 
+
+```
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 10s
+        max_attempts: 3
+        window: 30s
+```
+
+On the same level as environment to our apps configuration and can *deploy it*.
+The time-window is on 30s (not 60m) to show that its working a bit faster.
+
+To set up a localhost docker stack, do:
+
+`docker stack init --advertise-adr 127.0.0.1`
+
+then you can do
+
+`docker stack deploy -c . teststack`
+
+clean up with
+
+`docker stack rm teststack`
+
+The docker stack can also be on a remote host, which enables us to directly deploy our configuration. 
 
 ### Bonus: Github CI 
 
