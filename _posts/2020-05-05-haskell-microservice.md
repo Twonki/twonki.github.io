@@ -331,7 +331,6 @@ A nicer way is to set environment variables in the dockerfile and invoke the com
 We do by adding the following to our Dockerfile: 
 
 ```
-
 ENV MariaDB_Adress 127.0.0.1
 ENV MariaDB_Port 3306
 ENV MariaDB_DatabaseName microtope
@@ -420,12 +419,20 @@ clean up with
 
 The docker stack can also be on a remote host, which enables us to directly deploy our configuration. 
 
-### Bonus: Github CI 
-
 ## Conclusion 
 
-Not so hard! 
+So in general I noticed that it's not too hard to put Haskell in my existing project. 
+I'd say there is no point against Haskell in regards of infrastructure - it is as hard as any other language. 
+How good or horrible Haskell is for your project depends on the task and on what kind of code you write. 
 
-Some mariadb issues 
+The only pain-point were the mariadb-odbc issues, but to be honest they were reasonably fast resolved (~4h) and I might would have faced the same issue with other languages. 
+I hope that this post helps some people, as I have not seen any recent example on how to use mariadb with odbc in docker for Haskell.  
 
-Docker is very valuable, otherwise it would be the famous "works on my machine"
+Another takeaway was that docker proofed to be very valuable in showing me the odbc issues. 
+Without docker, i'd just have clapped my hand and say "Yeah i'm done" too early. 
+Also, Docker enables me to deliver a full artifact that is not any different. 
+
+But a last word of warning: 
+Due to cabal, the builds take quite long. 
+In Docker for most CIs these steps are not cached, and id'd be very careful to use it carelessly if you pay per buildminute.
+I have not yet figured out how to properly only install dependencies when they change so they can properly cached, as every time I touch the cabal file the layer changes. This is maybe a topic for the next post. 
