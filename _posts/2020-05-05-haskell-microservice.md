@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Building a Haskell Microservice"
-date:   2020-05-05
+date:   2020-05-09
 author: Leonhard Applis
 description: A Tutorial on how to build a minimal microservice using haskell and docker
 ---
@@ -9,13 +9,13 @@ description: A Tutorial on how to build a minimal microservice using haskell and
 Hi! I'll spare you with the mandatory "microservices are very important"-talk and cut right to it :) 
 
 Microservices ARE very important, and one thing I like about them is that you can choose a language you see fit for a single task. 
-Most modern microservice architectures are full-java + Spring, but I see especially in microservices a nice way to use haskell or other functional languages. 
+Most modern microservice architectures are full-java + Spring, but microservices are a nice way to utilize haskell or other functional languages where they are fit. 
 
-It is also a nice way to show your colleagues that it's not that scary, and you are not building an unmaintainable scary beast. 
+It is also a nice way to show your colleagues, that it's not that scary and you are not building an unmaintainable, scary beast. 
 
 ## Goals and Prerequisites 
 
-I already have a [project on microservices](https://github.com/Twonki/Microtope) and I want to add another one written in Haskell. 
+I already have a [project using a microservice architecture](https://github.com/Twonki/Microtope) and I want to add another service written in Haskell. 
 
 The Haskell microservice shall be a command-line executable, which runs every 30 minutes and performs database queries. 
 For my pet project it will check that every user has a logout for every login, so not two consecutive logins, but for the tutorial here we will just query a health table. 
@@ -24,7 +24,7 @@ The database is MariaDB, and we'll use HDBC+ODBC.
 To put it into "production" we will make a docker image for our service and add it to a docker compose. 
 
 I am starting with a ready-made database. 
-That is a MariaDB database with tables and users (one already for our microservice), easy usable by us via docker. 
+That is a MariaDB database with tables and users (one already for our microservice), easily usable with docker. 
 
 The steps required to install mariadb-odbc are shown in the regarding section below. 
 
@@ -65,9 +65,7 @@ executable Wesir
                   text                  >= 1.2.4 && < 1.3,
                   HDBC                  >= 2.4.0.3 && <2.5,
                   HDBC-odbc             >= 2.6.0.0 && <2.7,
-                  optparse-applicative == 0.15.1.0,
-                  time
-  hs-source-dirs: Src
+                  optparse-applicative == 0.15.1.0
   default-language:    Haskell2010
 ```
 
@@ -83,17 +81,15 @@ COPY . .
 
 RUN cabal new-install 
 
-# TODO: Add parameters as required
-
 ENTRYPOINT ["Wesir"] 
 ```
 
-With this, we do a short `docker build . -t wesir` and `docker run wesir` - and we should see another Hello world. 
+With this, we do a short `docker build . -t wesir` and `docker run wesir` and we should see another Hello world. 
 
 
 ### Console Arguments & Connection-properties 
 
-For the next step we could either try to make a first connection with hardcoded properties, or to pass properties. 
+For the next step we could either try to make a first connection with hardcoded properties or to pass the required connection-properties. 
 I decided to go for passing parameters first. 
 
 There are two common approaches to configure your service: A configuration file or passing command-line arguments and environment variables. 
@@ -105,8 +101,8 @@ If you already have an architecture, my suggestion is to stick to what is alread
 For my case I use environment variables in my docker compose and invoke the services with command-line arguments. 
 The scope of the services made it reasonable, and also this example service only needs parameters for our Database connection.
 
-For handling command line arguments in Haskell I recently came across [optparse-applicative](https://hackage.haskell.org/package/optparse-applicative) which offers a particularly great tutorial. 
-Using applicatives, it enables us to write small parsers for a datatype which resembles the required arguments. 
+For handling command line arguments in Haskell I recently came across [optparse-applicative](https://hackage.haskell.org/package/optparse-applicative), which offers a particularly great tutorial. 
+Using applicatives enables us to write small parsers for a datatype which resembles the required arguments, in our case the connection properties. 
 
 Our datatype looks like this: 
 
@@ -159,7 +155,7 @@ And the parser is mostly adjusted from the readme of optparse:
 ```
 
 We added a short explanation and a default value for each argument. 
-If no attribute is given, the default is taken, and if something strange is invoked a help is printed showing the expected datatype and description.
+If no attribute is given the default is taken and if something strange is invoked a help is printed showing the expected datatype and description.
 
 To use this cool feature, we adjust our main: 
 
@@ -192,13 +188,13 @@ Perfect! This is all we want for now.
 
 A real application should have some more args to be fair: Whether we want to be verbose, the logging level and a logging directory would be good candidates. 
 
-For my example I additionally have a parses that either looks for the quintett of connection properties OR for a connectionstring. 
+For my example I additionally have a parser that either looks for the quintett of connection properties OR for a connectionstring. 
 That was quite easy with optparse-applicative. 
 I can highly recommend this library - it does all I want and I can throw around some applicative operators to impress the readers of my blog. 
 
 ### Add HDBC & ODBC outside of Docker 
 
-The next step will be to connect with HDBC to our database outside of the docker image - that is from `cabal new-run` directly. 
+The next step will be to connect to our database outside of the docker image using HDBC - that is from `cabal new-run` directly. 
 
 First it's required to spin up the database (and wait a bit). For these initial steps I used `docker run -p 3306:3306 database` so I have it on localhost available. 
 
@@ -228,7 +224,7 @@ Driver = /usr/lib/libmaodbc.so
 
 And apply it with `sudo odbcinst -i -d -f Resources/MariaDB_odbc_driver_template.ini`. We can inspect it with `odbcinst -q -d`.
 
-This is all the changes we need to make to our machine and we can go back to Haskell for now. 
+This is all the changes we need to make to our machine and we can go back to Haskell. 
 
 We can add the hdbc now for our Program: 
 
@@ -278,7 +274,7 @@ Now we are entering the pain-point.
 On my normal machine, everything was working great (that is, a normal desktop ubuntu and many common things already installed). 
 Something on this made everything working perfectly fine and reasonable. 
 
-But when I simply tried to reproduce the steps above, it proved to not work. At all. 
+But when I tried to reproduce the steps above in the DockerImage, it proved to not work. At all. 
 Likely the reason is that some dependencies are missing, as the Haskell base-image seems to be a minimized debian image. 
 
 That is perfectly fine in general, but chasing the exact missing dependency of a certain mariadb-odbc connector for a specific minimized debian showed to be quite intense. 
@@ -402,7 +398,7 @@ But we can use functions of docker-stack or maybe kubernetes. For docker, we add
         window: 30s
 ```
 
-On the same level as environment to our apps configuration and can *deploy it*.
+Add this snippet on the same level as `environment` to our apps configuration to provide a *deploy* specification.
 The time-window is on 30s (not 60m) to show that its working a bit faster.
 
 To set up a localhost docker stack, do:
@@ -433,6 +429,6 @@ Without docker, i'd just have clapped my hand and say "Yeah i'm done" too early.
 Also, Docker enables me to deliver a full artifact that is not any different. 
 
 But a last word of warning: 
-Due to cabal, the builds take quite long. 
-In Docker for most CIs these steps are not cached, and id'd be very careful to use it carelessly if you pay per buildminute.
+Due to cabal the builds take quite long. 
+In Docker for most CIs these steps are not cached, and i'd be very careful to use it carelessly if you pay per build-minute.
 I have not yet figured out how to properly only install dependencies when they change so they can properly cached, as every time I touch the cabal file the layer changes. This is maybe a topic for the next post. 
