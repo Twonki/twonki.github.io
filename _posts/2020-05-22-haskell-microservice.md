@@ -1,39 +1,46 @@
 ---
 layout: post
 title:  "Building a Haskell Microservice"
-date:   2020-05-09
+date:   2020-05-22
 author: Leonhard Applis
 description: A Tutorial on how to build a minimal microservice using haskell and docker
 ---
 
 Hi! I'll spare you with the mandatory "microservices are very important"-talk and cut right to it :) 
 
-Microservices ARE very important, and one thing I like about them is that you can choose a language you see fit for a single task. 
+Microservices ARE very important and one thing I like about them is that you can choose a language you see fit for a single task. 
 Most modern microservice architectures are full-java + Spring, but microservices are a nice way to utilize haskell or other functional languages where they are fit. 
 
 It is also a nice way to show your colleagues, that it's not that scary and you are not building an unmaintainable, scary beast. 
+
+**Note:** I know there is [Servant](https://www.servant.dev/) and many smart people use it to build great microservices (at least Servant shows up if you google Haskell+Microservices).
+This tutorial is greatly different as it's not about frameworks but a bit beginner-friendlier and it covers a little of docker and it shows how to connect a database in a docker compose. 
+There is nothing wrong with putting servant on top of the what we do with our haskell-executable. 
+Also I have not found anything on ODBC+MariaDB and I think that's worth sharing. 
 
 ## Goals and Prerequisites 
 
 I already have a [project using a microservice architecture](https://github.com/Twonki/Microtope) and I want to add another service written in Haskell. 
 
-The Haskell microservice shall be a command-line executable, which runs every 30 minutes and performs database queries. 
+The Haskell microservice shall be a command-line executable which runs every 30 minutes and performs database queries. 
 For my pet project it will check that every user has a logout for every login, so not two consecutive logins, but for the tutorial here we will just query a health table. 
 The database is MariaDB, and we'll use HDBC+ODBC.
 
-To put it into "production" we will make a docker image for our service and add it to a docker compose. 
+To put it into *production* we will make a docker image for our service and add it to a docker compose. 
 
-I am starting with a ready-made database. 
-That is a MariaDB database with tables and users (one already for our microservice), easily usable with docker. 
+I am starting with a ready-made database (this will not be covered, but provided in the repo). 
+That is a MariaDB database with tables and users easily usable with docker. 
 
 The steps required to install mariadb-odbc are shown in the regarding section below. 
 
 That is all we need! 
-I'll put some copy and paste code into each section, and the *final* version of this minimal microservice can be found at [this tag](www.todo.com).
+
+The code to copy & paste of the final outcome is [in a minimal repository](https://github.com/Twonki/HaskellMariaDB_MicroserviceExample).
+You'll find everything you see here in its final state in that repository as well as the most important instructions to build and run.
 
 ## Step by Step 
 
-Every good thing needs a name, and my app is called *wesir*. I just liked it, and I didn't want to pseudonymize the files so I hope you like it to :) 
+Every good thing needs a name, and my app is called *Checker*.
 
 Lets build the app step by step with some examples. I might miss out some files / tweaks but they are definitely in the repository.  
 
@@ -52,13 +59,13 @@ and we have a normal cabal file alongside, where we also added all of our depend
 
 ```Haskell
 cabal-version:       3.0
-name:                Wesir
-version:             0.0.1.0
-synopsis:            Program to check MicroTope Database validity
+name:                Checker
+version:             0.1.0.0
+synopsis:            Minimal example to connect to a mariadb database using odbc
 license:             MIT
 category:            executable
 
-executable Wesir
+executable Checker
   import: deps
   main-is:            Program.hs
   build-depends:  base                  >= 4.13.0 && < 4.14,
@@ -81,10 +88,10 @@ COPY . .
 
 RUN cabal new-install 
 
-ENTRYPOINT ["Wesir"] 
+ENTRYPOINT ["Checker"] 
 ```
 
-With this, we do a short `docker build . -t wesir` and `docker run wesir` and we should see another Hello world. 
+With this, we do a short `docker build . -t minimal/checker` and `docker run minimal/checker` and we should see another Hello world. 
 
 
 ### Console Arguments & Connection-properties 
@@ -139,18 +146,18 @@ And the parser is mostly adjusted from the readme of optparse:
             <> short 'u'
             <> help "The username that will connect to the database"
             <> showDefault
-            <> value "admin"
+            <> value "checker"
             <> metavar "STRING" )    
         <*> strOption
             ( long "password"
             <> help "The password to use to connect to the database"
-            <> value "admin"
+            <> value "check4me"
             <> metavar "STRING" )
         <*> strOption
             ( long "database"
             <> short 'd'
             <> help "the database name to connect to at the database server"
-            <> value "microtope"
+            <> value "minimal"
             <> metavar "STRING" )
 ```
 
@@ -188,7 +195,7 @@ Perfect! This is all we want for now.
 
 A real application should have some more args to be fair: Whether we want to be verbose, the logging level and a logging directory would be good candidates. 
 
-For my example I additionally have a parser that either looks for the quintett of connection properties OR for a connectionstring. 
+For my example I additionally have a parser that either looks for the 5-tuple of connection properties OR for a connectionstring. 
 That was quite easy with optparse-applicative. 
 I can highly recommend this library - it does all I want and I can throw around some applicative operators to impress the readers of my blog. 
 
@@ -266,7 +273,8 @@ main = do
 This will do. 
 If the database is successfully running on localhost and the standard port, we can verify it using the standard parameters and do `cabal new-run`.
 
-Otherwise if we hide it, or have a different user, we need to pass arguments such as `cabal new-run -u otherUser --password otherPw`. If you use my image, the user can be found in the [sql files](https://github.com/Twonki/Microtope/blob/master/database/sql-files/Step02_createUser.sql).
+Otherwise if we hide it, or have a different user, we need to pass arguments such as `cabal new-run -u otherUser --password otherPw`. 
+If you use my image, the user can be found in the [sql files](https://github.com/Twonki/HaskellMariaDB_MicroserviceExample/blob/master/Database/sql-files/Step02_createUser.sql).
 
 ### Add ODBC to Docker 
 
@@ -307,12 +315,12 @@ RUN odbcinst -i -d -f Resources/MariaDB_odbc_driver_template.ini
 
 RUN cabal new-install 
 
-ENTRYPOINT [ "Wesir"]
+ENTRYPOINT [ "Checker"]
 ```
 
 Make sure to adjust the version in the MariaDB_odbc_driver_template. 
 
-To verify this step do `docker build . -t wesir` and `docker run wesir`. 
+To verify this step do `docker build . -t minimal/checker` and `docker run minimal/checker`. 
 
 It will fail, but if it tells you that you have no mariadb on localhost than it's failing the intended way. 
 
@@ -329,11 +337,11 @@ We do by adding the following to our Dockerfile:
 ```
 ENV MariaDB_Adress 127.0.0.1
 ENV MariaDB_Port 3306
-ENV MariaDB_DatabaseName microtope
-ENV MariaDB_User admin
-ENV MariaDB_PW admin
+ENV MariaDB_DatabaseName minimal
+ENV MariaDB_User checker
+ENV MariaDB_PW check4me
 
-ENTRYPOINT [Wesir -h ${MariaDB_Adress} -u ${MariaDB_User} --password ${MariaDB_PW} -p ${MariaDB_Port} -d ${MariaDB_DatabaseName}"]
+ENTRYPOINT [Checker -h ${MariaDB_Adress} -u ${MariaDB_User} --password ${MariaDB_PW} -p ${MariaDB_Port} -d ${MariaDB_DatabaseName}"]
 ```
 
 This for example enables us to pass the password as a [docker-secret](https://docs.docker.com/engine/swarm/secrets/), which can be considered best practice. Same for Kubernetes.
@@ -350,7 +358,7 @@ To use it, we download the shell-file and add it to our resources.
 Then we only have to adjust entrypoint: 
 
 ```
- ENTRYPOINT [ "/bin/bash", "-c","./Resources/wait-for-it.sh -t 0 -s --host=$MariaDB_Adress --port=$MariaDB_Port -- Wesir -h ${MariaDB_Adress} -u ${MariaDB_User} --password ${MariaDB_PW} -p ${MariaDB_Port} -d ${MariaDB_DatabaseName}"] 
+ ENTRYPOINT [ "/bin/bash", "-c","./Resources/wait-for-it.sh -t 0 -s --host=$MariaDB_Adress --port=$MariaDB_Port -- Checker -h ${MariaDB_Adress} -u ${MariaDB_User} --password ${MariaDB_PW} -p ${MariaDB_Port} -d ${MariaDB_DatabaseName}"] 
 ```
 
 The used flags are `-t 0` to "never stop trying" (quite motivating, otherwise it would end after trying for 100s) and `-s` to be silent. 
@@ -367,17 +375,18 @@ version: '3.3'
 
 services:
   db:
-    image: microtope/database
+    image: minimal/database
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       TZ: "Europe/Berlin"
-  wesir:
-    image: microtope/wesir
+  checker:
+    image: minimal/checker
     environment:
       MariaDB_Adress: db
       MariaDB_Port: 3306
-      MariaDB_User: admin
-      MariaDB_PW: admin
+      MariaDB_User: checker
+      MariaDB_PW: check4me
+      MariaDB_Database: minimal
     depends_on: 
       - db
 ```
@@ -387,7 +396,9 @@ We run it with `docker-compose . up` and stop it properly with `docker-compose .
 to start it regularly we need to use docker-stack (the options for `deploy` are not available in compose). 
 
 To start it in a regular fashion, including restarting it, the ugly way is to add a cronjob to our image. 
-But we can use functions of docker-stack or maybe kubernetes. For docker, we add: 
+But we can use functions of docker-stack or maybe kubernetes (should look similar). 
+
+For docker, we add: 
 
 ```
     deploy:
