@@ -36,6 +36,7 @@ Code-Wise, except for the code the attendees had to write, both workshops used t
 
 Both workshops were held with ~10 voluntary attendees in their first or second year of studies (mostly first).
 It took four hours and a lunch break.
+At the end of the workshop, the participants had to write a small test (2 pages, also in the repository), but the results will be shown in a second part.  
 
 ## General Technical Issues
 
@@ -78,24 +79,77 @@ This will not help with actually teaching someone how to java - that would be a 
 
 ## The Microlearning Workshop
 
+[Microlearning](https://en.wikipedia.org/wiki/Microlearning) refers to a method of learning where one goes *small steps*, 
+with doing small exercises frequently and subsequently. 
+The idea of microlearning is particular common in learning languages (human languages, not programming languages), where you repeat 20 words per day. 
+The Antipattern to microlearning is the classic math-exercise where you get a setup and the final question, but no instructions for intermediate steps.
+As a rule of thump, microlearning exercises should take atmost a few minutes. 
+
+For the workshop we defined a single exercise as either implementing a function under test, or a single unit test.
+We split the exercises into *three rounds*, each after their corresponding part in the presentation. 
+For the first round they had to implement a given set of tests, where the name of the test was given. 
+For the second round, they had to implement tests using stubs and write some of the method bodies in a *test-driven* way. 
+In the last round, for mocks, they were given a mix of tests and method bodies in various steps of implementation.
+
+Unlike the Game based approach there was less *controlling* what people did. 
+We just looked over their shoulders, or helped people who reached out to us. 
+This was quite chill and everyone could work in their pace. The time given for the exercises was enough in general. 
+
 ## Microlearning Take-Aways
 
-- Really different paces
-- 
+So the first take-away of microlearning is that people show up with different knowledge and they can solve the tasks in really different times. 
+Some people know java and do a fail-fast approach, hitting compile after every line, 
+others lacked Java but had the whole ideas figured out and just asked us for help in implementation.
+In general just one or two participants "did perfect" but everyone seemed to learn one thing or the other - not necessarily unit testing. 
+
+I am not sure how to address this - after all it's not too bad but on the other side the workshop was about learning testing.
+I think one way is to get a more consistent group of attendees.
+
+Another thing was that people finished early and helped others. 
+That is of course very friendly, but it might be better if they get more work for themselves. 
+But if you put up a suite of 100 tests for a single exercise, it looks frightening for the slower attendees.
+An idea would be to have modules like *basics* and addons such as *error-testing* or *parameterized-tests*. But this has many features of game-based learning as this is very similar to side-quests.
 
 ## The Game-Based Workshop
 
+- Fixed Rules
+- Fixed Teams
+- Points per Test, Points added over all rounds
 - The fragments created by the students were put into a seperate branch 
 
 ## Game-based Takeaways
 
-- Unordered
-- Competetive
-- Teams were build
-- Judge Role was not (seriously needed)
+The first thing that has to be said: It was pretty competitive. 
+Despite the winner not actually gaining anything, everyone took it pretty serious and wanted to win. 
+I think this is not an issue, but an important take-away. It is enough to have points and have the game in a mode that you can win even in the last round.
+
+Also the teams developed tactics. 
+Writing many (trashy) tests gave the enemy team a good opportunity for easy points, so everyone focussed on writing hard tests and tests for edge-cases. 
+Others tried to test every method, so the other team has to definitely implement it.
+Unlike the differences in attendees-skills mentioned in microlearning, the strengths of the teams were quite additive. 
+If one had figured out how to use stubs properly, and someone else was not having issues with Java, the team was performing generally well.
+This kind of team-building was impressive given their setup time.
+
+Second thing is, that it was sometimes a bit unordered. 
+Teams tried to distract each other from the task in various ways, both with verbal interaction but also with un-necessary code. 
+There were no fouls whatsoever, but the variable names I tell you were horrifying. 
+Some insults in the comments etc. 
+We caught most of the shenanigans with the definitions of fouls and the requirement that the tests are run-able. 
+
+I think this can be solved with splitting the teams in different rooms. 
+But to be honest it gave it a nice atmosphere and everyone had fun.
+Maybe with splitting the groups physically it would be too competitive in the end, and harder to help (and control) the teams. 
+
+The judges were mostly not necessary. 
+The only fouls we found and rejected were tests that were not clearly matched upon the requirements (such as, something was testing for a default value while it should throw an error).
+But I think without judges people would do more fouls.
+
+In hindsight, I would limit the teams to 3 people with rotating *A tests B, B tests C, C tests A* in case of an uneven number of teams and a tournament mode for an even number of teams.
+We've seen that some people had little chance to participate in a 5 member team, simply as only one can write at a time. 
 
 ## Lessons Learned
 
 - More Time 
 - Everyone had fun 
 - This is a good idea in general
+- Maybe pick best of both? First round micro, second and third competetive
