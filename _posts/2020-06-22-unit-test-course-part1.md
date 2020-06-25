@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Holding a Unit-Test Workshop - Part I"
-date:   2020-06-22
+date:   2020-06-25
 author: Leonhard Applis
 description: Lessons learned from two workshops hold
 categories: [Testing, Java, Teaching]
@@ -112,10 +112,20 @@ An idea would be to have modules like *basics* and addons such as *error-testing
 
 ## The Game-Based Workshop
 
-- Fixed Rules
-- Fixed Teams
-- Points per Test, Points added over all rounds
-- The fragments created by the students were put into a seperate branch 
+In [game-based learning](https://en.wikipedia.org/wiki/Educational_game) the goal is to ease learning with adding common game elements. 
+These can include achievements, competition or *story*. The terms "educational game" and "gamification" are sometimes mixed up and a bit blurry, so, in general I'd say that gamification is adding game elements to a non-game structure, while an educational game adds educational elements to a game. They are starting from opposite sides of the same spectrum.
+I think we played an educational game with our students, which went as follows: 
+
+We split the participants into two teams of roughly the same size. 
+The teams were given a task to implement unit-tests against and (yet) empty class or interface based on the requirements given in the task.
+Once the time was over, the teams swapped their code, and now Team A had to fulfill the tests of Team B and Team B had to fulfill the tests of Team A.
+The coding-task was either solved once every test is green or when the time was over. 
+If the time-out ended the round, the team with the higher percentage of green tests won.
+
+In addition, we put up a sheet of [rules](https://github.com/Twonki/UnitShop/blob/master/Game/Rules.md) which had the game-rules as well as a definition of an foul written in stone. 
+Before the teams swapped their code, the judges looked over the tests to spot fouls. 
+
+The swapping was done using git branches, so Team A pushed their tests to a branch 'TeamA_Task1_TestsReady' etc. 
 
 ## Game-based Takeaways
 
@@ -146,10 +156,20 @@ But I think without judges people would do more fouls.
 
 In hindsight, I would limit the teams to 3 people with rotating *A tests B, B tests C, C tests A* in case of an uneven number of teams and a tournament mode for an even number of teams.
 We've seen that some people had little chance to participate in a 5 member team, simply as only one can write at a time. 
+Also I would average the percentage of tests per round, to make come-backs easier. Otherwise maybe a team looses the first 2 rounds and looses motivation for round 3.
 
 ## Lessons Learned
 
-- More Time 
-- Everyone had fun 
-- This is a good idea in general
-- Maybe pick best of both? First round micro, second and third competetive
+So the first lesson learned: It was fun! 
+Everyone was pretty engaged and the participants enjoyed seeing someone put effort into a workshop.
+
+Except for the things mentioned in their regarding section, I think all of this needs more time than 4h. 
+This is a bit inconvenient, but in general I'd do a full-day workshop for both now.
+Then you can deal with all the setup issues, java issues and get everything done properly. 
+
+If we were not to do a comparison, I'd change the workshop to be a mix of both approaches. 
+Maybe start with a round of microlearning, so everyone is really set up, and contribute his points towards the teams.
+Then once everyone understood the basics, start the real team-game as in the game-based approach.
+
+I think with another iteration and the lessons learned, this is a good workshop with a one-time setup effort. 
+In the next post (or maybe the one after), I'll address the statistical results of both workshops tests, which had surprising results.
