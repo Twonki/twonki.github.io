@@ -84,4 +84,4 @@ That's it! Have a nice day everyone.
 
 ## Data 
 
-![datasheet](/assets/workshopdata.PNG)
+My jekyll skills are currently buggy. Something is odd here, but I have an image for you [here](/assets/workshopdata.PNG). 
