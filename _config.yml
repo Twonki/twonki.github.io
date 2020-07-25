@@ -1,6 +1,6 @@
 
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://twonki.github.io/" # the base hostname & protocol for your site
+url: "https://twonki.github.io/" # the base hostname & protocol for your site
 permalink: :title/
 avatar: /assets/avatar.png
 favicon: /assets/favicon.ico

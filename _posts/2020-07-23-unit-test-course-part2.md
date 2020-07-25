@@ -84,4 +84,4 @@ That's it! Have a nice day everyone.
 
 ## Data 
 
-![datasheet](/assets/images/Workshop_Data.PNG)
+![datasheet](/assets/workshopdata.PNG)
