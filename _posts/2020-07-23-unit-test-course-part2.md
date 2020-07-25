@@ -5,7 +5,7 @@ date:   2020-07-23
 author: Leonhard Applis
 description: Comparison of Microlearning and Gamebased Learning
 categories: [Testing, Java, Teaching]
-reading: 10
+reading: 5
 ---
 
 After we looked at [the unit-test workshop](https://github.com/Twonki/UnitShop) and discussed some lessons learned, what to do different, etc., 
@@ -84,4 +84,4 @@ That's it! Have a nice day everyone.
 
 ## Data 
 
-![Datasheet](/images/Workshop_Data.PNG)
+![datasheet](/assets/images/Workshop_Data.PNG)
