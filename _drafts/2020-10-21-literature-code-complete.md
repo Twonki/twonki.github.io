@@ -61,20 +61,34 @@ However, I think you get the most value out of this if you are using a pdf inste
 
 ## Whats bad ? 
 
-- Size
-- Price
-- Chapter on Performance Tuning
+The first things that's bad is the size. 
+With so much, while being properly *hyperlinked* it is demotivating to just open it up. 
+Also, even if you read it fully (like I did), you cannot remember everything covered (like I do).
+Maybe it would be better to split it into parts or something like that, but I am not sure where to split it.
+
+Also it comes with a heavy price, which makes it something that you just don't simply get.
+
+Another bad point that stuck out to me was the chapter on performance tuning. 
+While most of the recommendations stay high level and vague, the chapter on performance tuning can be summarized as "If you need to do performance tuning, read the docs and ask people who know". Which is a fair advice, but then most of the chapter does not fit in.
 
 ## Recommendations 
 
-- if you had a proper coding-mentor (like a senior dev) you will know most of the items covered
-- try to get it used
-- try to get it as pdf if you can work with pdfs well
+I think, if you had a proper *mentor*, a senior dev teaching you how to program, how to debug, who applied reasoning and took time to explain why he does what he does, you do not need to read this book. 
+A good apprenticeship in programming will cover most of what the book teaches and works for. 
+However, the book can help you find the missing spots in your inherited knowledge, for example the person I learned programming from didn't pay too much attention on comments, so I am actively trying to improve on commenting. 
+If you are not aware of your personal issues to grow on, then the book is good because it covers how you improve, gives checklists and shows you literally everything there is you could need to know process-wise.
+If you do know your weak spots, I'd recommend that you get a book on the specific topic instead. 
+For me, *the art of readable code* helped me more on the topic of comments and self-documenting code than *code complete* did.
+
+My other recommendation about the book is that you either get it used, or you get it as a pdf if you can work with pdf's. 
+I think with the build-in references using a pdf is maybe the very best you can do, but it's hard to show of a 900 page pdf in zoom behind you. 
 
 ## Conclusion
 
-- Improving is up to you
-- Maybe: update for newer sources
+In conclusion, the most important part of the book is that it contains a lot of tips, tricks and checklists, but applying them is up to you. 
+The attitude of learning is unfortunately something you can't get from books. 
+Or, you don't get it for free.
+If you expect to find *knowledge* in the book, don't buy it. This book teaches you how to learn.
 
 ## Trivia
 
