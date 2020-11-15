@@ -5,10 +5,10 @@ date:   2020-10-21
 author: Leonhard Applis
 description: A Review of Code Complete 2nd Edition
 categories: [Book-Review]
-reading: 5
+reading: 12
 ---
 
-Ofcourse, I am not a real book critic, but I thought if I read a lot I might can share a bit about what I consume anyway. 
+Of course, I am not a real book critic, but I thought if I read a lot I might can share a bit about what I consume anyway. 
 Also, it helps me to keep track of what I thought would be the most important parts (some kind of mnemonic for myself).
 
 So, here is the first review: Code Complete 2nd Edition, a book that you are likely to see behind some of your professors in zoom calls.
